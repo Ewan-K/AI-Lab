@@ -2,7 +2,7 @@
 
 A python solution for 8Queens puzzle using DFS.
 
-## Guideling
+## Guideline
 
 1. Running the line below will initiate a game interacting with user.
 
