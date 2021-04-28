@@ -44,21 +44,22 @@ class Game:
             if not self.collide(cur_queen, pos):  # 回溯法的体现
                 # 如果棋盘状态state已经等于num-1，即到达倒数第二行，而这时最后一行皇后又没冲突，直接yield，打出其位置(pos, )
                 if len(cur_queen) == num - 1:  # cur_queen=()
-                    yield [pos,]
+                    yield [
+                        pos,
+                    ]
                 else:
-                    for result in self.solve(num, cur_queen + [pos,]):
-                        yield [pos,] + result
+                    for result in self.solve(num, cur_queen + [
+                            pos,
+                    ]):
+                        yield [
+                            pos,
+                        ] + result
 
     def run(self, row=0):
         solutions = self.solve(8)
         self.solves = []
         for idx, solution in enumerate(solutions):
             self.solves.append(solution)
-
-    #                                                                            #
-    ##############################################################################
-    #################             完成后请记得提交作业             #################
-    ##############################################################################
 
     def showResults(self, result):
         """
@@ -83,6 +84,9 @@ class Game:
 
 
 game = Game()
+# game.chessBoard.play()
 solutions = game.get_results()
 print('There are {} results.'.format(len(solutions)))
+for i in range(len(solutions)):
+    print(solutions[i])
 game.showResults(solutions[0])
