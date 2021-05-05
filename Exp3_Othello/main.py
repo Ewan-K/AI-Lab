@@ -5,7 +5,7 @@ from game import Game
 import random
 
 # 人类玩家黑棋初始化
-black_player = HumanPlayer("X")
+black_player = AIPlayer("X", 1)
 
 # AI 玩家 白棋初始化
 white_player = AIPlayer("O", 1)
