@@ -1,4 +1,5 @@
 ## Introdution
-A MCTS solution for Othello board game.
+
+MCTS and Alpha-Beta pruning search solutions for Othello board game.
 
 ## Guideline
