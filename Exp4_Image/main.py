@@ -85,36 +85,37 @@ def normalization(image):
 def noise_mask_image(img, noise_ratio):
     """
     根据题目要求生成受损图片
-    :param img: 图像矩阵，一般为 np.ndarray
-    :param noise_ratio: 噪声比率，可能值是0.4/0.6/0.8
-    :return: noise_img 受损图片, 图像矩阵值 0-1 之间，数据类型为 np.array, 
+    :param img: cv2 读取图片,而且通道数顺序为 RGB
+    :param noise_ratio: 噪声比率，类型是 List,，内容:[r 上的噪声比率,g 上的噪声比率,b 上的噪声比率]
+                        默认值分别是 [0.8,0.4,0.6]
+    :return: noise_img 受损图片, 图像矩阵值 0-1 之间，数据类型为 np.array,
              数据类型对象 (dtype): np.double, 图像形状:(height,width,channel),通道(channel) 顺序为RGB
     """
     # 受损图片初始化
     noise_img = None
 
     # -------------实现受损图像答题区域-----------------
-    row, col = img.shape[0], img.shape[1]
-    rgb = [None, None, None]  # rgb
+    row = img.shape[0]
+    col = img.shape[1]
+    RGB = [None, None, None]
     for i in range(3):
-        # 构造其中一个通道的噪声图
+        # produce noised point for each color tunnel
         for j in range(row):
-            if rgb[i] is None:
-                rgb[i] = np.random.choice(2, (1, col),
-                                          p=[noise_ratio, 1 - noise_ratio])
+            if RGB[i] is not None:
+                tmp = np.random.choice(2, (1, col),
+                                       p=[noise_ratio[i], 1 - noise_ratio[i]])
+                RGB[i] = np.concatenate((RGB[i], tmp), axis=0)
             else:
-                a = np.random.choice(2, (1, col),
-                                     p=[noise_ratio, 1 - noise_ratio])
-                rgb[i] = np.concatenate((rgb[i], a), axis=0)
+                RGB[i] = np.random.choice(
+                    2, (1, col), p=[noise_ratio[i], 1 - noise_ratio[i]])
 
-    # 扩展 shape
+    # expand
     for i in range(3):
-        rgb[i] = rgb[i][:, :, np.newaxis]
-    # 合并
-    rst = np.concatenate((rgb[0], rgb[1], rgb[2]), axis=2)
-    noise_img = rst * img
+        RGB[i] = RGB[i][:, :, np.newaxis]
+    # merge
+    res = np.concatenate((RGB[0], RGB[1], RGB[2]), axis=2)
+    noise_img = res * img
     # -----------------------------------------------
-
     return noise_img
 
 
@@ -156,7 +157,7 @@ def compute_error(res_img, img):
 
 def restore_image(noise_img, size=4):
     """
-    使用 二元线性回归模型 进行图像恢复。
+    使用 二元线性回归模型 进行图像恢复
     :param noise_img: 一个受损的图像
     :param size: 输入区域半径，长宽是以 size*size 方形区域获取区域, 默认是 4
     :return: res_img 恢复后的图片，图像矩阵值 0-1 之间，数据类型为 np.array,
@@ -169,38 +170,38 @@ def restore_image(noise_img, size=4):
     noise_mask = get_noise_mask(noise_img)
 
     # -------------实现图像恢复代码答题区域----------------------------
-    rows, cols, channel = res_img.shape
-    region = 10  # 10 * 10
-    row_cnt = rows // region
-    col_cnt = cols // region
+    region = 10
+    row, col, channel = res_img.shape
+    rowCount = row // region
+    colCount = col // region
 
-    for chan in range(channel):
-        for rn in range(row_cnt + 1):
-            ibase = rn * region
-            if rn == row_cnt:
-                ibase = rows - region
-            for cn in range(col_cnt + 1):
-                jbase = cn * region
-                if cn == col_cnt:
-                    jbase = cols - region
-                x_train = []
-                y_train = []
-                x_test = []
+    for tunnel in range(channel):
+        for rowC in range(rowCount + 1):
+            ibase = rowC * region
+            if rowC == rowCount:
+                ibase = row - region
+            for colC in range(colCount + 1):
+                jbase = colC * region
+                if colC == colCount:
+                    jbase = col - region
+                xTrain = []
+                yTrain = []
+                xTest = []
                 for i in range(ibase, ibase + region):
                     for j in range(jbase, jbase + region):
-                        if noise_mask[i, j, chan] == 0:  # 噪音点
-                            x_test.append([i, j])
+                        if noise_mask[i, j, tunnel] == 0:
+                            xTest.append([i, j])
                             continue
-                        x_train.append([i, j])
-                        y_train.append([res_img[i, j, chan]])
-                if x_train == []:
-                    print("x_train is None")
+                        xTrain.append([i, j])
+                        yTrain.append([res_img[i, j, tunnel]])
+                if xTrain == []:
+                    print("nothing in xTrain")
                     continue
-                reg = LinearRegression()
-                reg.fit(x_train, y_train)
-                pred = reg.predict(x_test)
-                for i in range(len(x_test)):
-                    res_img[x_test[i][0], x_test[i][1], chan] = pred[i][0]
+                regression = LinearRegression()
+                regression.fit(xTrain, yTrain)
+                pdt = regression.predict(xTest)
+                for k in range(len(xTest)):
+                    res_img[xTest[k][0], xTest[k][1], tunnel] = pdt[k][0]
     res_img[res_img > 1.0] = 1.0
     res_img[res_img < 0.0] = 0.0
     # ---------------------------------------------------------------
@@ -211,7 +212,7 @@ if __name__ == "__main__":
     img_path = 'xihu.png'
     img = read_image(img_path)
 
-    noise_ratio = 0.8
+    noise_ratio = [0.8, 0.4, 0.6]
     nor_img = normalization(img)
     print(nor_img.shape)
 
