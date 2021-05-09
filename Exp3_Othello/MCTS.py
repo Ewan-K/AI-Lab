@@ -26,13 +26,13 @@ class MC:
 
         # 时间限制（每一步在60s以内）
         try:
-            func_timeout(59, self.while_function, args=[root])
+            func_timeout(59, self.iterate_function, args=[root])
         except FunctionTimedOut:
             pass
 
         return self.best_child(root, math.sqrt(2), color).curAction
 
-    def while_function(self, root):
+    def iterate_function(self, root):
         # four steps
         while True:
             # selection, expantion
