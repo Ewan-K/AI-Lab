@@ -10,8 +10,7 @@ import sys
 class MC:
     def tree_search(self, board, color):
         """ 
-        实现UCT方法
-        return: action
+        实现UCT方法顶层
         """
         # 只有一种选择
         actions = list(board.get_legal_actions(color))
@@ -87,8 +86,6 @@ class MC:
         sortedChildren = sorted(node.children,
                                 key=lambda x: x.bestVal[color],
                                 reverse=True)
-
-        # 返回best_val最大的元素
         return sortedChildren[0]
 
     def default_policy(self, board, color):

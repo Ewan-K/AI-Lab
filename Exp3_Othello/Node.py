@@ -30,6 +30,6 @@ class Node:
                 2 * log(self.parent.visitedTimes) / self.visitedTimes)
 
     def game_over(self, board):
-        l1 = list(board.get_legal_actions('X'))
         l2 = list(board.get_legal_actions('O'))
-        return len(l1) == 0 and len(l2) == 0
+        l1 = list(board.get_legal_actions('X'))
+        return len(l2) == 0 and len(l1) == 0
