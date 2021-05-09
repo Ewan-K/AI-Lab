@@ -12,10 +12,8 @@ class MC:
         """ 
         实现UCT方法
         return: action
-        board: 当前棋局
-        color: 当前玩家
         """
-        # 特殊情况：只有一种选择
+        # 只有一种选择
         actions = list(board.get_legal_actions(color))
         if len(actions) == 1:
             return list(actions)[0]
@@ -24,7 +22,7 @@ class MC:
         curBoard = deepcopy(board)
         root = Node(curBoard, None, color, None)
 
-        # 时间限制（每一步在60s以内）
+        # 时间限制60s以内
         try:
             func_timeout(59, self.iterate_function, args=[root])
         except FunctionTimedOut:
@@ -41,6 +39,24 @@ class MC:
             reward = self.default_policy(nodeExpand.board, nodeExpand.color)
             # backpropagation
             self.back_propagation(nodeExpand, reward)
+
+    def tree_policy(self, node):
+        """
+        传入当前需要开始搜索的节点（从根节点开始）
+        返回最好的需要expend的节点
+        叶子结点则直接返回
+        """
+        returnNode = node
+        while not returnNode.isover:
+            if len(returnNode.unvisitedActions) > 0:
+                # 有未expand节点
+                return self.expand(returnNode)
+            else:
+                # 选择val最大的
+                returnNode = self.best_child(returnNode, math.sqrt(2),
+                                             returnNode.color)
+
+        return returnNode
 
     def expand(self, node):
         """ 
@@ -74,24 +90,6 @@ class MC:
 
         # 返回best_val最大的元素
         return sortedChildren[0]
-
-    def tree_policy(self, node):
-        """
-        传入当前需要开始搜索的节点（从根节点开始）
-        返回最好的需要expend的节点
-        叶子结点则直接返回
-        """
-        returnNode = node
-        while not returnNode.isover:
-            if len(returnNode.unvisitedActions) > 0:
-                # 有未expand节点
-                return self.expand(returnNode)
-            else:
-                # 选择val最大的
-                returnNode = self.best_child(returnNode, math.sqrt(2),
-                                             returnNode.color)
-
-        return returnNode
 
     def default_policy(self, board, color):
         """
@@ -128,13 +126,13 @@ class MC:
         newNode = node
         while newNode is not None:
             newNode.visitedTimes += 1
-            if reward[0] == 0:
-                newNode.reward['X'] += reward[1]
-                newNode.reward['O'] -= reward[1]
+            if reward[0] == 2:
+                pass
             elif reward[0] == 1:
                 newNode.reward['X'] -= reward[1]
                 newNode.reward['O'] += reward[1]
-            elif reward[0] == 2:
-                pass
+            elif reward[0] == 0:
+                newNode.reward['X'] += reward[1]
+                newNode.reward['O'] -= reward[1]
 
             newNode = newNode.parent

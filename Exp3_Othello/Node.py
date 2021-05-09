@@ -3,17 +3,17 @@ from math import log, sqrt
 
 class Node:
     def __init__(self, board, parent, color, action):
-        self.parent = parent  # 父节点
+        self.board = board
+        self.color = color
         self.children = []  # 子节点列表
+        self.parent = parent  # 父节点
         self.visitedTimes = 0  # 已访问次数
-        self.board = board  # 选择这个Node时的棋盘
-        self.color = color  # 当前玩家
         self.curAction = action  # 到达这个节点的action
         self.unvisitedActions = list(
             board.get_legal_actions(color))  # 未访问过的actions
-        self.isover = self.game_over(board)  # 是否结束
+        self.isover = self.game_over(board)
         if (self.isover == False) and (len(self.unvisitedActions)
-                                       == 0):  # 没步可走，游戏尚未结束
+                                       == 0):  # 没步可走且游戏尚未结束
             self.unvisitedActions.append("noRes")
 
         self.bestVal = {'X': 0, 'O': 0}
