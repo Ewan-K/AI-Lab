@@ -1,15 +1,21 @@
 # 导入黑白棋文件
 from player import Player, RandomPlayer, HumanPlayer, AIPlayer
-from board import Board
 from game import Game
-import random
 
-# 人类玩家黑棋初始化
+
+# AI玩家黑棋初始化
+# Alpha-Beta
 # black_player = AIPlayer("X", 1)
+# MCTS
 black_player = AIPlayer("X")
 
+# 人类玩家黑棋初始化
+# black_player = HumanPlayer("X")
+
 # AI玩家白棋初始化
+# Alpha-Beta
 # white_player = AIPlayer("O", 1)
+# MCTS
 white_player = AIPlayer("O")
 
 # 游戏初始化，第一个玩家是黑棋，第二个玩家是白棋

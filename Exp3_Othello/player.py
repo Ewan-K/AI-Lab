@@ -1,3 +1,4 @@
+from MCTS import MC
 import random
 
 winner_map = {"X": 0, "O": 1}
@@ -143,7 +144,6 @@ class AIPlayer(Player):
         :param color: 下棋方，'X' - 黑棋，'O' - 白棋
         :param strategy: 0表示minimax，1表示alpha-beta剪枝
         """
-
         super().__init__(color)
         self.strategy = strategy
 
@@ -265,10 +265,6 @@ class AIPlayer:
         """
 
         self.color = color
-        
-    def uct_search():
-        
-
 
     def get_move(self, board):
         """
@@ -283,9 +279,8 @@ class AIPlayer:
         print("请等一会，对方 {}-{} 正在思考中...".format(player_name, self.color))
 
         # -----------------请实现你的算法代码--------------------------------------
-
-        action = None
-        action = self.uct_search(board, self.color)
+        MCTS = MC()
+        action = MCTS.tree_search(board, self.color)
         # ------------------------------------------------------------------------
 
         return action
