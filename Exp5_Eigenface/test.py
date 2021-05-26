@@ -9,9 +9,9 @@ import numpy as np
 def show_img(img, h=112, w=92):
     """
     展示单张图片
-    
+
     :param img: numpy array 格式的图片
-    :return: 
+    :return:
     """
     # 展示图片
     plt.imshow(img.reshape(h, w), 'gray')
@@ -22,14 +22,14 @@ def show_img(img, h=112, w=92):
 def plot_gallery(images, titles, n_row=3, n_col=5, h=112, w=92):  # 3行4列
     """
     展示多张图片
-    
+
     :param images: numpy array 格式的图片
     :param titles: 图片标题
     :param h: 图像reshape的高
     :param w: 图像reshape的宽
     :param n_row: 展示行数
     :param n_col: 展示列数
-    :return: 
+    :return:
     """
     # 展示图片
     plt.figure(figsize=(1.8 * n_col, 2.4 * n_row))
@@ -46,7 +46,7 @@ def plot_gallery(images, titles, n_row=3, n_col=5, h=112, w=92):  # 3行4列
 def spilt_data(nPerson, nPicture, data, label):
     """
     分割数据集
-    
+
     :param nPerson : 志愿者数量
     :param nPicture: 各志愿者选入训练集的照片数量
     :param data : 等待分割的数据集
@@ -73,14 +73,14 @@ def spilt_data(nPerson, nPicture, data, label):
 def plot_gallery(images, titles, n_row=3, n_col=5, h=112, w=92):  # 3行4列
     """
     展示多张图片
-    
+
     :param images: numpy array 格式的图片
     :param titles: 图片标题
     :param h: 图像reshape的高
     :param w: 图像reshape的宽
     :param n_row: 展示行数
     :param n_col: 展示列数
-    :return: 
+    :return:
     """
     # 展示图片
     plt.figure(figsize=(1.8 * n_col, 2.4 * n_row))
@@ -97,7 +97,7 @@ def plot_gallery(images, titles, n_row=3, n_col=5, h=112, w=92):  # 3行4列
 def eigen_train(trainset, k=20):
     """
     训练特征脸（eigenface）算法的实现
-    
+
     :param trainset: 使用 get_images 函数得到的处理好的人脸数据训练集
     :param K: 希望提取的主特征数
     :return: 训练数据的平均脸, 特征脸向量, 中心化训练数据
@@ -149,8 +149,7 @@ def eigen_train(trainset, k=20):
     reduced_data = np.array(eigvectors_sort[:k]).transpose()
     # print(trainset.shape, trainset.transpose().shape)
     # print(reduced_data.shape)
-    trainset = trainset[:
-                        k]  # In case the trainset passed in is not as desired, truncate to k rows
+    trainset = trainset[:k]  # In case the trainset passed in is not as desired, truncate to k rows
     feature = np.dot(trainset.transpose(), reduced_data)
     feature = feature.transpose()
 
@@ -167,7 +166,7 @@ def eigen_train(trainset, k=20):
 def rep_face(image, avg_img, eigenface_vects, numComponents=0):
     """
     用特征脸（eigenface）算法对输入数据进行投影映射，得到使用特征脸向量表示的数据
-    
+
     :param image: 输入数据
     :param avg_img: 训练集的平均人脸数据
     :param eigenface_vects: 特征脸向量
@@ -199,7 +198,7 @@ def recFace(representations,
             sz=(112, 92)):
     """
     利用特征人脸重建原始人脸
-    
+
     :param representations: 表征数据
     :param avg_img: 训练集的平均人脸数据
     :param eigenface_vects: 特征脸向量
@@ -233,8 +232,7 @@ data = ORL['data']
 label = ORL['label']
 num_eigenface = 200
 
-train_vectors, train_labels, test_vectors, test_labels = spilt_data(
-    40, 5, data, label)
+train_vectors, train_labels, test_vectors, test_labels = spilt_data(40, 5, data, label)
 train_vectors = train_vectors / 255
 print(train_vectors.shape)
 test_vectors = test_vectors / 255
@@ -249,8 +247,7 @@ test_vectors = test_vectors / 255
 # plot_gallery(train_vectors, train_labels)
 
 # 返回平均人脸、特征人脸、中心化人脸
-avg_img, eigenface_vects, trainset_vects = eigen_train(train_vectors,
-                                                       num_eigenface)
+avg_img, eigenface_vects, trainset_vects = eigen_train(train_vectors, num_eigenface)
 
 # # 打印两张特征人脸作为展示
 # eigenfaces = eigenface_vects.reshape((num_eigenface, 112, 92))
@@ -286,10 +283,8 @@ faces = []
 names = []
 # 选用不同数量的特征人脸重建人脸
 for i in range(20, 200, 20):
-    representations, numEigenFaces = rep_face(image, avg_img, eigenface_vects,
-                                              i)
-    face, name = recFace(representations, avg_img, eigenface_vects,
-                         numEigenFaces)
+    representations, numEigenFaces = rep_face(image, avg_img, eigenface_vects, i)
+    face, name = recFace(representations, avg_img, eigenface_vects, numEigenFaces)
     faces.append(face)
     names.append(name)
 
@@ -304,10 +299,8 @@ faces = []
 names = []
 # 选用不同数量的特征人脸重建人脸
 for i in range(20, 200, 20):
-    representations, numEigenFaces = rep_face(image, avg_img, eigenface_vects,
-                                              i)
-    face, name = recFace(representations, avg_img, eigenface_vects,
-                         numEigenFaces)
+    representations, numEigenFaces = rep_face(image, avg_img, eigenface_vects, i)
+    face, name = recFace(representations, avg_img, eigenface_vects, numEigenFaces)
     faces.append(face)
     names.append(name)
 
