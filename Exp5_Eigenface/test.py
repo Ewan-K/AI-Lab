@@ -127,8 +127,8 @@ def eigen_train(trainset, k=20):
     # plt.show()
 
     #  compute normalised face of trainset
-    normalised_training_tensor = np.ndarray(shape=(200, 112 * 92))
-    for i in range(200):
+    normalised_training_tensor = np.ndarray(shape=(k, 112 * 92))
+    for i in range(k):
         normalised_training_tensor[i] = np.subtract(trainset[i], avg_img)
 
     # compute covariance matrix
