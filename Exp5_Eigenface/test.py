@@ -115,7 +115,7 @@ def eigen_train(trainset, k=20):
     for i in trainset:
         avg_img = np.add(avg_img, i)
 
-    avg_img = np.divide(avg_img, float(200)).flatten()
+    avg_img = np.divide(avg_img, float(k)).flatten()
     # plt.imshow(avg_img.reshape(112, 92), cmap='gray')
     # plt.tick_params(labelleft='off',
     #                 labelbottom='off',
@@ -147,6 +147,10 @@ def eigen_train(trainset, k=20):
         eig_pairs[index][1] for index in range(len(eigenvalues))
     ]
     reduced_data = np.array(eigvectors_sort[:k]).transpose()
+    # print(trainset.shape, trainset.transpose().shape)
+    # print(reduced_data.shape)
+    trainset = trainset[:
+                        k]  # In case the trainset passed in is not as desired, truncate to k rows
     feature = np.dot(trainset.transpose(), reduced_data)
     feature = feature.transpose()
 
@@ -232,6 +236,7 @@ num_eigenface = 200
 train_vectors, train_labels, test_vectors, test_labels = spilt_data(
     40, 5, data, label)
 train_vectors = train_vectors / 255
+print(train_vectors.shape)
 test_vectors = test_vectors / 255
 
 # print("训练数据集:", train_vectors.shape)
@@ -288,7 +293,7 @@ for i in range(20, 200, 20):
     faces.append(face)
     names.append(name)
 
-plot_gallery(faces, names, n_row=3, n_col=3)
+# plot_gallery(faces, names, n_row=3, n_col=3)
 
 print("-" * 55)
 print("重建测试集人脸")
@@ -306,4 +311,4 @@ for i in range(20, 200, 20):
     faces.append(face)
     names.append(name)
 
-plot_gallery(faces, names, n_row=3, n_col=3)
+# plot_gallery(faces, names, n_row=3, n_col=3)
