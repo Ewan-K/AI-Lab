@@ -1,7 +1,7 @@
 ## Introdution
 
-Produce noised image and then restore using Linear Regression.
+Use Eigenface algorithm to recognize and reconstruct faces. Facial database is in ORL.npz.
 
 ## Guideline
 
-xihu.png is the original image, noised_xihu.png is the noised image, restored_xihu.png is the restored image.
+test.py is the code satisfying desired function in Eigenface.ipynb.

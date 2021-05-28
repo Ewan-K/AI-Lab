@@ -288,7 +288,7 @@ for i in range(20, 200, 20):
     faces.append(face)
     names.append(name)
 
-# plot_gallery(faces, names, n_row=3, n_col=3)
+plot_gallery(faces, names, n_row=3, n_col=3)
 
 print("-" * 55)
 print("重建测试集人脸")
@@ -304,4 +304,4 @@ for i in range(20, 200, 20):
     faces.append(face)
     names.append(name)
 
-# plot_gallery(faces, names, n_row=3, n_col=3)
+plot_gallery(faces, names, n_row=3, n_col=3)
