@@ -1,7 +1,3 @@
 ## Introdution
 
-Produce noised image and then restore using Linear Regression.
-
-## Guideline
-
-xihu.png is the original image, noised_xihu.png is the noised image, restored_xihu.png is the restored image.
+An experiment in which I trained and Fine-Tuned MobileNetV2 network using MindSpore platform(resembled to PyTorch and TensorFlow). The network can be applied to garbage classification. The experiment was not very interesting so I didn't push the code.
